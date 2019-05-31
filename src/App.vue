@@ -18,7 +18,7 @@
       <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
           <a @click="onHomeButtonClicked" class="navbar-item">Home</a>
-
+          <a @click="onAddButtonClicked" class="navbar-item">Add a torrent</a>
           <a @click="onSettingsButtonClicked" class="navbar-item">Settings</a>
         </div>
 
@@ -46,6 +46,9 @@ export default {
   methods: {
     onHomeButtonClicked() {
       this.$router.push({ path: "/" });
+    },
+    onAddButtonClicked() {
+      this.$router.push({ path: "/torrents/add" });
     },
     onSettingsButtonClicked() {
       this.$router.push({ path: "/settings" });

@@ -9,7 +9,8 @@ export const fetchApi = async (path, auth, args) => {
     headers: {
       authorization: auth.token
         ? `Bearer ${auth.token}`
-        : `Basic ${generateBasicAuthString(auth.username, auth.password)}`
+        : `Basic ${generateBasicAuthString(auth.username, auth.password)}`,
+      "Content-Type": "application/json"
     },
     body: args ? JSON.stringify(args) : undefined
   });
