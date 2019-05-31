@@ -1,31 +1,45 @@
 <template>
   <section class="section">
-    <div class="box">
-      <h1 class="title is-text-align-center form-element">Log-in</h1>
+    <h1 class="title is-text-align-center">Log-in</h1>
+    <div>
       <p>Username</p>
-      <input type="text" class="input form-element" v-model="username">
+      <input type="text" class="input" v-model="username">
+    </div>
+    <div>
       <p>Password</p>
-      <input type="password" class="input form-element" v-model="password">
-      <input type="submit" class="button form-element" value="Log-in" @click="onSubmitClick">
-      <div class="notification is-danger" v-if="loginError">
-        <button class="delete" @click="loginError=false"></button>
-        {{ loginError }}
-      </div>
+      <input type="password" class="input" v-model="password">
+    </div>
+    <input type="submit" class="button" value="Log-in" @click="onSubmitClick">
+    <div class="notification is-danger" v-if="loginError">
+      <button class="delete" @click="loginError=false"></button>
+      {{ loginError }}
     </div>
   </section>
 </template>
 
 <script>
+import { fetchApi } from "@/api/fetcher";
+
 export default {
   name: "Login",
   data() {
     return {
       username: undefined,
-      password: undefined
+      password: undefined,
+      loginError: undefined
     };
   },
   methods: {
-    onSubmitClick() {}
+    onSubmitClick() {
+      fetchApi("user/login", {
+        username: this.username,
+        password: this.password
+      }).then(result => {
+        this.$store.commit("setToken", result.token);
+        localStorage.token = result.token;
+        this.$router.push({ path: "/" });
+      });
+    }
   }
 };
 </script>
@@ -34,9 +48,15 @@ export default {
 .formElement {
   max-width: 400px;
 }
-.box {
-  margin: 0 auto;
-  padding: 2rem;
+.section {
+  margin: auto;
   max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.section * {
+  margin: 0.2rem;
 }
 </style>

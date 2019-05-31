@@ -25,7 +25,12 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a @click="onLoginButtonClicked" class="button is-light">Log in</a>
+              <a
+                @click="onLoginButtonClicked"
+                class="button is-light"
+                v-if="!$store.state.token"
+              >Log in</a>
+              <a @click="onLogoutButtonClicked" class="button is-light" v-else>Log out</a>
             </div>
           </div>
         </div>
@@ -47,6 +52,12 @@ export default {
     },
     onLoginButtonClicked() {
       this.$router.push({ path: "/login" });
+    },
+    onLogoutButtonClicked() {
+      // fetchApi /api/user/logout
+      this.$store.commit("setToken", undefined);
+      localStorage.removeItem("token");
+      this.$router.push({ path: "/" });
     }
   }
 };
