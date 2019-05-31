@@ -1,23 +1,64 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a
+          role="button"
+          class="navbar-burger burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a @click="onHomeButtonClicked" class="navbar-item">Home</a>
+
+          <a @click="onSettingsButtonClicked" class="navbar-item">Settings</a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a @click="onLoginButtonClicked" class="button is-light">Log in</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
     <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
+  name: "App",
+  methods: {
+    onHomeButtonClicked() {
+      this.$router.push({ path: "/" });
+    },
+    onSettingsButtonClicked() {
+      this.$router.push({ path: "/settings" });
+    },
+    onLoginButtonClicked() {
+      this.$router.push({ path: "/login" });
+    }
+  }
 };
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0;
 }
 </style>
