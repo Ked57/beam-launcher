@@ -9,7 +9,7 @@
       <section class="section">
         <h1 class="title is-text-align-center">Add a torrent</h1>
         <p>
-          <b>You can drag and drop any .torrent file here</b>
+          <b>You can drag and drop any .torrent file here on click in the rectangle</b>
         </p>
         <vue-dropzone class="dropZone" id="torrentFile" :options="dropOptions"></vue-dropzone>
         <div>
@@ -42,12 +42,16 @@ export default {
       error: undefined,
       dropOptions: {
         url: "http://localhost:3000/api/torrent/add/file",
-        addRemoveLinks: true,
         maxFiles: 1,
         chunking: false,
         headers: {
           authorization: `Bearer ${localStorage.token}`
         }
+      },
+      addRemoveLink: true,
+      acceptedFiles: ".torrent",
+      chunksUploaded: () => {
+        this.success = true;
       }
     };
   },
