@@ -47,7 +47,8 @@ export default {
   name: "Home",
   data() {
     return {
-      torrents: undefined
+      torrents: undefined,
+      interval: undefined
     };
   },
   mounted() {
@@ -57,7 +58,7 @@ export default {
       }
       this.$store.commit("setToken", localStorage.token);
     }
-    setInterval(() => {
+    this.interval = setInterval(() => {
       if (!this.$store.state.token) {
         return;
       }
@@ -67,6 +68,9 @@ export default {
         this.torrents = torrents;
       });
     }, 2500);
+  },
+  beforeRouteLeave() {
+    clearInterval(this.interval);
   }
 };
 </script>
