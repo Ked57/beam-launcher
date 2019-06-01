@@ -4,23 +4,26 @@
       <p>Hello there, your seedbox is ready.</p>
       <p>You can log-in by clicking on the login button in the top-right end of your screen</p>
     </div>
+
     <div v-else>
       <section class="section">
         <h1 class="title is-text-align-center">Add a torrent</h1>
+        <p>
+          <b>You can use a magnet link or drag and drop any .torrent file here</b>
+        </p>
         <div>
-          <p>Lien magnet</p>
-          <input type="text" class="input" v-model="magnetUrl">
+          <input type="text" class="input" placeholder="Magnet link" v-model="magnetUrl">
         </div>
         <input type="submit" class="button" value="Submit" @click="onSubmitClicked">
-        <div class="notification is-danger" v-if="error">
-          <button class="delete" @click="error=false"></button>
-          {{ error }}
-        </div>
-        <div class="notification is-success" v-if="success">
-          <button class="delete" @click="success=false"></button>
-          Torrent added successfuly
-        </div>
       </section>
+      <div class="notification is-danger" v-if="error">
+        <button class="delete" @click="error=false"></button>
+        {{ error }}
+      </div>
+      <div class="notification is-success" v-if="success">
+        <button class="delete" @click="success=false"></button>
+        Torrent added successfuly
+      </div>
     </div>
   </div>
 </template>
@@ -46,6 +49,10 @@ export default {
   },
   methods: {
     onSubmitClicked() {
+      if (!this.magnetUrl) {
+        this.error = "Please provide a magnet url";
+        return;
+      }
       fetchApi(
         "torrent/add/magnet",
         {
@@ -71,5 +78,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 </style>

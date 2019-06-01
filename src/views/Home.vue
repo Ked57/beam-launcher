@@ -57,11 +57,16 @@ export default {
       }
       this.$store.commit("setToken", localStorage.token);
     }
-    fetchApi("torrents", {
-      token: this.$store.state.token
-    }).then(torrents => {
-      this.torrents = torrents;
-    });
+    setInterval(() => {
+      if (!this.$store.state.token) {
+        return;
+      }
+      fetchApi("torrents", {
+        token: this.$store.state.token
+      }).then(torrents => {
+        this.torrents = torrents;
+      });
+    }, 2500);
   }
 };
 </script>
