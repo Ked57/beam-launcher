@@ -9,12 +9,14 @@
       <section class="section">
         <h1 class="title is-text-align-center">Add a torrent</h1>
         <p>
-          <b>You can use a magnet link or drag and drop any .torrent file here</b>
+          <b>You can drag and drop any .torrent file here</b>
         </p>
+        <vue-dropzone class="dropZone" id="torrentFile" :options="dropOptions"></vue-dropzone>
         <div>
+          <p>Or use a magnet link</p>
           <input type="text" class="input" placeholder="Magnet link" v-model="magnetUrl">
+          <input type="submit" class="button" value="Submit" @click="onSubmitClicked">
         </div>
-        <input type="submit" class="button" value="Submit" @click="onSubmitClicked">
       </section>
       <div class="notification is-danger" v-if="error">
         <button class="delete" @click="error=false"></button>
@@ -30,14 +32,27 @@
 
 <script>
 import { fetchApi } from "@/api/fetcher";
+import vueDropzone from "vue2-dropzone";
 export default {
   name: "AddTorrent",
   data() {
     return {
       magnetUrl: undefined,
       success: undefined,
-      error: undefined
+      error: undefined,
+      dropOptions: {
+        url: "http://localhost:3000/api/torrent/add/file",
+        addRemoveLinks: true,
+        maxFiles: 1,
+        chunking: false,
+        headers: {
+          authorization: `Bearer ${localStorage.token}`
+        }
+      }
     };
+  },
+  components: {
+    vueDropzone
   },
   mounted() {
     if (!this.$store.state.token) {
@@ -79,5 +94,9 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+.dropZone {
+  min-height: 250px;
+  border: dashed black;
 }
 </style>

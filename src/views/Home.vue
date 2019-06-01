@@ -69,8 +69,9 @@ export default {
       });
     }, 2500);
   },
-  beforeRouteLeave() {
+  beforeRouteLeave(to, from, next) {
     clearInterval(this.interval);
+    next();
   }
 };
 </script>

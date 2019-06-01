@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:3000/api";
 
-const generateBasicAuthString = (username, password) =>
+export const generateBasicAuthString = (username, password) =>
   window.btoa(unescape(encodeURIComponent(`${username}:${password}`)));
 
 export const fetchApi = async (path, auth, args) => {
