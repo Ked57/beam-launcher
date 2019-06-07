@@ -5,6 +5,17 @@
       <p>You can log-in by clicking on the login button in the top-right end of your screen</p>
     </div>
     <div v-else>
+      <div class="controlPanel">
+        <div class="controlPanelIcon">
+          <font-awesome-icon class="icon" size="lg" icon="play" @click="onResumeClicked"/>
+        </div>
+        <div class="controlPanelIcon">
+          <font-awesome-icon class="icon" size="lg" icon="stop" @click="onPauseClicked"/>
+        </div>
+        <div class="controlPanelIcon">
+          <font-awesome-icon class="icon" size="lg" icon="trash" @click="onTrashClicked"/>
+        </div>
+      </div>
       <table class="table">
         <thead>
           <tr>
@@ -19,7 +30,7 @@
           </tr>
         </thead>
         <tbody v-for="torrent in torrents" :key="torrent.name">
-          <tr>
+          <tr @click="() => onTorrentRowClicked(torrent.name)">
             <td>{{ torrent.name }}</td>
             <td>
               <progress
@@ -50,6 +61,20 @@ export default {
       torrents: undefined,
       interval: undefined
     };
+  },
+  methods: {
+    onTorrentRowClicked(torrentName) {
+      console.log("Selected ", torrentName);
+    },
+    onResumeClicked() {
+      console.log("Resume clicked");
+    },
+    onPauseClicked() {
+      console.log("Pause clicked");
+    },
+    onTrashClicked() {
+      console.log("Trash clicked");
+    }
   },
   mounted() {
     if (!this.$store.state.token) {
@@ -82,5 +107,18 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.controlPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.controlPanelIcon {
+  padding: 0.3rem 1rem;
+  border-radius: 0.5rem;
+}
+.controlPanelIcon:hover {
+  background-color: #3273dc;
+  opacity: 0.75;
 }
 </style>
