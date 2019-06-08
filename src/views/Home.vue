@@ -6,13 +6,13 @@
     </div>
     <div v-else>
       <div class="controlPanel">
-        <div class="controlPanelIcon">
+        <div class="controlPanelIcon" @click="onResumeClicked">
           <font-awesome-icon class="icon" size="lg" icon="play" @click="onResumeClicked"/>
         </div>
-        <div class="controlPanelIcon">
+        <div class="controlPanelIcon" @click="onPauseClicked">
           <font-awesome-icon class="icon" size="lg" icon="stop" @click="onPauseClicked"/>
         </div>
-        <div class="controlPanelIcon">
+        <div class="controlPanelIcon" @click="onTrashClicked">
           <font-awesome-icon class="icon" size="lg" icon="trash" @click="onTrashClicked"/>
         </div>
       </div>
@@ -30,7 +30,7 @@
           </tr>
         </thead>
         <tbody v-for="torrent in torrents" :key="torrent.name">
-          <tr @click="() => onTorrentRowClicked(torrent.name)">
+          <tr @click="() => onTorrentRowClicked(torrent.name)" class="row" :id="torrent.name">
             <td>{{ torrent.name }}</td>
             <td>
               <progress
@@ -59,21 +59,71 @@ export default {
   data() {
     return {
       torrents: undefined,
-      interval: undefined
+      interval: undefined,
+      selectedRow: "Fedora-Astronomy_KDE-Live-x86_64-30"
     };
+  },
+  computed: {
+    selected(torrentName) {
+      return torrentName === this.selectedRow ? "selectedRow" : "";
+    }
   },
   methods: {
     onTorrentRowClicked(torrentName) {
       console.log("Selected ", torrentName);
+      if (this.selectedRow) {
+        const formerRow = document.getElementById(this.selectedRow);
+        if (formerRow) {
+          formerRow.classList.remove("selectedRow");
+        }
+      }
+      this.selectedRow = torrentName;
+      const row = document.getElementById(torrentName);
+      if (row) {
+        row.classList.add("selectedRow");
+      }
     },
     onResumeClicked() {
       console.log("Resume clicked");
+      fetchApi(
+        `torrent/resume/${
+          this.torrents.find(torrent => torrent.name === this.selectedRow)
+            .infoHash
+        }`,
+        {
+          token: this.$store.state.token
+        }
+      ).then(() => {
+        console.log("got a good response");
+      });
     },
     onPauseClicked() {
       console.log("Pause clicked");
+      fetchApi(
+        `torrent/pause/${
+          this.torrents.find(torrent => torrent.name === this.selectedRow)
+            .infoHash
+        }`,
+        {
+          token: this.$store.state.token
+        }
+      ).then(() => {
+        console.log("got a good response");
+      });
     },
     onTrashClicked() {
       console.log("Trash clicked");
+      fetchApi(
+        `torrent/delete/${
+          this.torrents.find(torrent => torrent.name === this.selectedRow)
+            .infoHash
+        }`,
+        {
+          token: this.$store.state.token
+        }
+      ).then(() => {
+        console.log("got a good response");
+      });
     }
   },
   mounted() {
@@ -120,5 +170,11 @@ export default {
 .controlPanelIcon:hover {
   background-color: #3273dc;
   opacity: 0.75;
+}
+.row:hover {
+  background-color: #77abff;
+}
+.selectedRow {
+  background-color: #4e84da;
 }
 </style>
